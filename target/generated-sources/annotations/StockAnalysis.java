@@ -2,57 +2,35 @@ package com.stocksuggest.stocksuggest.model;
 
 public class StockAnalysis {
 
-    private String symbol;
-    private double expectedReturn;
-    private double volatility;
-    private int riskScore;
+    private final String symbol;
+    private final double expectedReturn;
+    private final double volatility;
+    private final int riskScore;
 
-    // Default Constructor
-    public StockAnalysis() {
-    }
-
-    // Constructor used in your project
     public StockAnalysis(String symbol,
                          double expectedReturn,
                          double volatility,
                          int riskScore) {
+
         this.symbol = symbol;
         this.expectedReturn = expectedReturn;
         this.volatility = volatility;
         this.riskScore = riskScore;
     }
 
-    // Getters and Setters
-
     public String getSymbol() {
         return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
     }
 
     public double getExpectedReturn() {
         return expectedReturn;
     }
 
-    public void setExpectedReturn(double expectedReturn) {
-        this.expectedReturn = expectedReturn;
-    }
-
     public double getVolatility() {
         return volatility;
     }
 
-    public void setVolatility(double volatility) {
-        this.volatility = volatility;
-    }
-
     public int getRiskScore() {
         return riskScore;
-    }
-
-    public void setRiskScore(int riskScore) {
-        this.riskScore = riskScore;
     }
 }
