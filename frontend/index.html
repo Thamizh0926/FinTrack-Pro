@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinTrack Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="bg-mesh"></div>
+
+  <div class="container">
+
+    <!-- NAV -->
+    <nav>
+      <div class="nav-logo">FinTrack <span>Pro</span></div>
+      <div class="nav-right">
+        <div class="live-badge"><div class="live-dot"></div>Live</div>
+        <button class="watchlist-btn" id="wlBtn" onclick="toggleWatchlistPanel()">
+          ★ Watchlist (<span id="wlCount">0</span>)
+        </button>
+      </div>
+    </nav>
+
+    <!-- WATCHLIST PANEL -->
+    <div class="watchlist-panel" id="watchlistPanel">
+      <p class="wp-title">★ Your Watchlist</p>
+      <div class="wp-chips" id="wpChips">
+        <span class="wp-empty">No stocks added yet. Click a card to add.</span>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <h1>Stock<br><em>Recommendations</em></h1>
+      <p class="hero-sub">
+        Enter your <strong style="color:var(--green)">investment amount</strong>,
+        <strong style="color:var(--cyan)">time horizon</strong>, and
+        <strong style="color:var(--purple)">risk level</strong> — and we'll recommend the best stocks for you.
+      </p>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls-panel">
+      <div class="controls-top">
+        <div class="field">
+          <label>💰 Investment ($)</label>
+          <input type="number" id="investment" value="10000" min="100" step="500">
+        </div>
+        <div class="field">
+          <label>📅 Months</label>
+          <div class="range-wrap">
+            <span class="range-val" id="monthsVal">6 mo</span>
+            <input type="range" id="months" min="1" max="120" value="6"
+              oninput="updateMonthsLabel(this.value)">
+          </div>
+        </div>
+        <div class="field">
+          <label>⚖️ Risk Appetite</label>
+          <div class="risk-pills">
+            <button class="risk-pill active-low" data-risk="low" onclick="selectRisk(this)">Low</button>
+            <button class="risk-pill" data-risk="medium" onclick="selectRisk(this)">Med</button>
+            <button class="risk-pill" data-risk="high" onclick="selectRisk(this)">High</button>
+          </div>
+        </div>
+      </div>
+      <div class="controls-bottom">
+        <div class="filter-chips">
+          <span class="chip active" data-filter="all" onclick="applyFilter(this)">All</span>
+          <span class="chip" data-filter="buy" onclick="applyFilter(this)">Buy</span>
+          <span class="chip" data-filter="hold" onclick="applyFilter(this)">Hold</span>
+          <span class="chip" data-filter="avoid" onclick="applyFilter(this)">Avoid</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="btn-get" id="fetchBtn" onclick="fetchRecommendations()">Get Picks ▶</button>
+        </div>
+      </div>
+      <div class="loading-bar" id="loadingBar"><div class="loading-fill"></div></div>
+      <div class="error-box" id="errorBox"></div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results" id="results">
+
+      <!-- Stats strip -->
+      <div class="stats-strip">
+        <div class="stat-card"><span class="s-val" id="st1">—</span><span class="s-key">Capital</span></div>
+        <div class="stat-card"><span class="s-val" id="st2">—</span><span class="s-key">Best Pick</span></div>
+        <div class="stat-card"><span class="s-val" id="st3">—</span><span class="s-key">Avg Return</span></div>
+        <div class="stat-card"><span class="s-val" id="st4">—</span><span class="s-key">Stocks</span></div>
+      </div>
+
+      <!-- Recommendation cards -->
+      <div class="section-hdr">
+        <h3>Recommendations</h3>
+        <div class="sort-controls">
+          <button class="sort-btn active" data-sort="return" onclick="sortCards(this)">Return <span class="arrow">↓</span></button>
+          <button class="sort-btn" data-sort="risk" onclick="sortCards(this)">Risk <span class="arrow"></span></button>
+          <button class="sort-btn" data-sort="volatility" onclick="sortCards(this)">Volatility <span class="arrow"></span></button>
+        </div>
+      </div>
+      <div class="reco-grid" id="recoGrid"></div>
+
+      <div class="glow-divider"></div>
+
+      <!-- Allocation table -->
+      <div class="alloc-section">
+        <div class="section-hdr">
+          <h3>Allocation Breakdown</h3>
+        </div>
+        <table class="alloc-table" id="allocTable">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Allocation %</th>
+              <th>Amount</th>
+              <th>Exp. Return</th>
+              <th>Risk</th>
+            </tr>
+          </thead>
+          <tbody id="allocBody"></tbody>
+        </table>
+      </div>
+
+      <div class="footnote">
+        ⚠️ Recommendations are generated from model-based analysis and do not constitute financial advice.
+        Expected returns are estimates and do not guarantee future results.
+        Always consult a licensed financial advisor before investing.
+      </div>
+
+    </div><!-- end results -->
+
+  </div><!-- end container -->
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+      <div class="modal-body">
+        <div id="modalContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
